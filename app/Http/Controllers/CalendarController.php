@@ -8,6 +8,7 @@ use App\Models\Reservations;
 use App\Models\Services;
 use App\Models\Calendars;
 use Carbon\Carbon;
+use App\Helpers\CarbonDay;
 
 class CalendarController extends Controller
 {
@@ -36,6 +37,7 @@ class CalendarController extends Controller
         $monthEnd       = $request->data['endMonht'] ?? $month;
         $yearEnd        = $request->data['endYear'] ?? $year; 
         $monthEndStatic = $request->data['endMonht'];
+        $daysDisabled    = $request->data['daysDisabled'];
 
         if($year < $yearEnd && $month > $monthEnd){
             $monthEnd = 12;
@@ -83,9 +85,13 @@ class CalendarController extends Controller
                         return ($toDay && $object->capacity == $object->confirmed_pax_count)  ?  true : $carry;
                     }, false);
 
-                    $isWorkingDay = $start->dayOfWeek !== Carbon::WEDNESDAY && 
-                    $start->dayOfWeek !== Carbon::SATURDAY && 
-                    $start->dayOfWeek !== Carbon::SUNDAY;
+                    $isWorkingDay = true;
+                    foreach ($daysDisabled as $day) {
+                        if ($start->dayOfWeek === CarbonDay::getDayOfWeek($day)) {
+                            $isWorkingDay = false;
+                            break;
+                        }
+                    }
 
                     array_push($days, [
                         'day'   => (int) $start->format('d'),

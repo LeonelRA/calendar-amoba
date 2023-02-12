@@ -89,7 +89,7 @@
 
                 if (this.calendar > 0) {
                     dataFilter = {
-                        calendarId: this.calendar,
+                        calendarId: this.calendar
                     }
                 }
 

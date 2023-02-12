@@ -19,7 +19,7 @@
                         <li>Tuesday</li>
                         <li>Wednesday</li>
                         <li>Thursday</li>
-                        <li>Fruday</li>
+                        <li>Friday</li>
                         <li>Saturday</li>
                     </ul>
                     <ul id="dates">
@@ -66,7 +66,8 @@
                     startYear: 2021,
                     endYear: 2021,
                     startDay: '2021-01-01',
-                    endDay: '2021-01-31'
+                    endDay: '2021-01-31',
+                    daysDisabled: ['sun', 'sat']
                 }
             }
         },
@@ -77,11 +78,12 @@
             getDatesCalendar(){
 
                 const data = {
-                    calendarId : this.calendarId,
-                    startMonht : this.filter.startMonht,
-                    endMonht   : this.filter.endMonht,
-                    startYear  : this.filter.startYear,
-                    endYear    : this.filter.endYear
+                    calendarId   : this.filter.calendarId,
+                    startMonht   : this.filter.startMonht,
+                    endMonht     : this.filter.endMonht,
+                    startYear    : this.filter.startYear,
+                    endYear      : this.filter.endYear,
+                    daysDisabled : this.filter.daysDisabled
                 }
 
                 axios.post('/api/calendar', {data}).then(resp => {
@@ -122,6 +124,11 @@
 
             filterCalendar(object){
 
+                if (object.days_disabled) {
+                    const daysDisabled = Object.keys(object.days_disabled).filter(key => object.days_disabled[key] === 0);
+                    this.filter.daysDisabled = daysDisabled;                    
+                }
+
                 if(object.startDate){
                     this.filter.startDay = object.startDate.substring(0,10);
                     this.filter.endDay   = object.endDate.substring(0,10);
@@ -132,7 +139,7 @@
                     this.filter.endYear    = object.endDate.substring(0,4);
                 }
 
-                this.calendarId = object.calendarId ?? null;
+                this.filter.calendarId  = object.calendarId ?? null;
 
                 this.getDatesCalendar();
             }

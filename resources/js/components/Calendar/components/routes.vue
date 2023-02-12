@@ -38,7 +38,16 @@
                 if (this.routeIndex !== null) {
                     this.$emit('filterRoutes', {
                         startDate : this.routes[this.routeIndex][0].date_init,
-                        endDate : this.routes[this.routeIndex][0].date_finish
+                        endDate : this.routes[this.routeIndex][0].date_finish,
+                        days_disabled: {
+                            mon: this.routes[this.routeIndex][0].mon,
+                            tue: this.routes[this.routeIndex][0].tue,
+                            wed: this.routes[this.routeIndex][0].wed,
+                            thu: this.routes[this.routeIndex][0].thu,
+                            fri: this.routes[this.routeIndex][0].fri,
+                            sat: this.routes[this.routeIndex][0].sat,
+                            sun: this.routes[this.routeIndex][0].sun,
+                        }
                     });   
                 }
             },
